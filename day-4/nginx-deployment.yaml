@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-deployment # rótulo do deployment
+  name: nginx-deployment # nome do deployment
+spec:
+  replicas: 1 # quantidade de pods
+  selector:
+    matchLabels:
+      app: nginx-deployment # os pods vao ter essa label
+  template:
+    metadata:
+      labels:
+        app: nginx-deployment
+    spec:
+      containers:
+      - image: nginx:1.19.1
+        name: nginx
+        resources:
+          limits: # o maximo que o pod vai poder utilizar
+            cpu: "0.5"
+            memory: 256Mi
+          requests: # recursos default
+            cpu: 0.25
+            memory: 128Mi
+        livenessProbe:
+       #   tcpSocket: # vai barter em uma porta especifica para testar 
+       #    port: 81
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10 # a cada 10s ira fazer a verificação
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec: 
+            command: 
+            - curl
+            - -f
+            - http://localhost:80/
+          initialDelaySeconds: 10
+          periodSeconds: 10 # a cada 10s ira fazer a verificação
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1 # quantas vezes vai garantir que é sucesso
+        startupProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+
+
+
+
+
+
+
