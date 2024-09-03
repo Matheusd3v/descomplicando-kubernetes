@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    storage: lento
+  name: meu-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce # ficara disponivel como leitura e escrita em apenas um nó
+    # - ReadWriteMany pv poderia ser montado como leitura e escrita em vários nós
+    # - ReadOnlyMany pv poderia ser montado em vários nós somente como leitura
+  persistentVolumeReclaimPolicy: Retain
+    # persistentVolumeClaimPolicy: Recycle --> pv será excluido quando o pvc for excluido, mas antes será limpo
+    # persistentVolumeClaimPolicy: Delete --> pv será excluido quando o pvc for excluido
+  hostPath: # armazena no disco do nó
+    path: /mnt/data
+  storageClassName: giropops # será adicionado esse diretório ao storageClass criado anteriormente
+
+  # caso usasse nfs:
+  # nfs:
+  #   server: ...
+  #   path: ...
