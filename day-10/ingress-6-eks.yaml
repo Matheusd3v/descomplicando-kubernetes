@@ -4,11 +4,12 @@ metadata:
   name: giropops-senhas
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-    cert-manager.io/cluster-issuer: "letsencrypt-prod" # usa o cert-manager de prod (para o cluster inteiro)
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$request_uri"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: nginx
-  tls: # sessão onde ativa o certificado
-  - hosts: # ativa o certificado para os dns abaixo
+  tls:
+  - hosts:
     - matheus-backend-dev.tech
     secretName: giropops-container-senhas-matheus
   rules:
@@ -22,4 +23,3 @@ spec:
             name: giropops-senhas
             port:
               number: 5000
-
