@@ -1,0 +1,16 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-label-namespace
+spec:
+  rules:
+  - name: add-labels-ns
+    match:
+      resources:
+        kinds:
+        - Namespace
+    mutate:
+      patchStrategicMerge:  # estrategia para mudanças em algum recurso
+        metadata:
+          labels:
+            Matheus: "Lindo_Demais"
